@@ -1,7 +1,4 @@
-import main.java.Deadline;
-import main.java.Task;
-import main.java.Event;
-import main.java.ToDo;
+import main.java.*;
 
 import java.util.*;
 public class Duke {
@@ -59,26 +56,56 @@ public class Duke {
                             e = e + arr[i] + " ";
                         }
                         if (fir.equals("todo")) {
-                            tasks[j] = new ToDo(e);
-                            System.out.println(" Got it. I've added this task: ");
-                            System.out.println(tasks[j].toString());
-                            System.out.println("Now you have " + (j + 1) + " tasks in the list.");
-                            j = j + 1;
-                        } else {
-                            for (int i = 0; i < j; i = i + 1) {
-                                if (s.equals("Done " + (i + 1))) {
-                                    tasks[i].markAsDone();
-                                    System.out.println("Nice! I've marked this task as done: ");
-                                    System.out.println(tasks[i].toString());
+                            if (e.equals("")) {
+                                DukeException t = new DukeException(fir);
+                                System.out.println(t.cannotBeEmpty());
+                            } else {
+                                tasks[j] = new ToDo(e);
+                                System.out.println(" Got it. I've added this task: ");
+                                System.out.println(tasks[j].toString());
+                                System.out.println("Now you have " + (j + 1) + " tasks in the list.");
+                                j = j + 1;
+                            }
+                        } else if (fir.equals("deadline")) {
+                            if (e.equals("")) {
+                                DukeException t = new DukeException(fir);
+                                System.out.println(t.cannotBeEmpty());
+                            }
+                        } else if (fir.equals("event")) {
+                            if (e.equals("")) {
+                                DukeException t = new DukeException(fir);
+                                System.out.println(t.cannotBeEmpty());
+                            }
+                        } else if (fir.equals("Done")) {
+                            if (e.equals("")) {
+                                DukeException t = new DukeException(fir);
+                                System.out.println(t.cannotBeEmpty());
+                            } else {
+                                for (int i = 0; i < j; i = i + 1) {
+                                    if (s.equals("Done " + (i + 1))) {
+                                        tasks[i].markAsDone();
+                                        System.out.println("Nice! I've marked this task as done: ");
+                                        System.out.println(tasks[i].toString());
+                                    }
                                 }
+                            }
+                        }else{
+                                    DukeException t = new DukeException(fir);
+                                    System.out.println(t.NotACommand());
+                                }
+
                             }
                         }
                     }
                 }
             }
         }
-    }
-}
+
+
+
+
+
+
 
 
 
