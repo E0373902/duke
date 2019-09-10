@@ -4,69 +4,80 @@ import java.io.*;
 import java.lang.*;
 
 public class Duke {
-    public static void main(String[] args) throws FileNotFoundException {
-     File file = new File("C:\\Users\\0108s\\OneDrive\\Documents\\duke\\Level 7 help.txt");
-     String fileName = "C:\\Users\\0108s\\OneDrive\\Documents\\duke\\Level 7 help.txt";
-     ArrayList<Task> tasks = new ArrayList<Task>();
-     System.out.println("Hello I'm Duke\n" + "What can I do for you?");
-        int j = 0;
-        Scanner input = new Scanner(System.in);
-        while (true) {
+    public static void main(String[] args) {
+        File file = new File("C:\\Users\\0108s\\OneDrive\\Documents\\duke\\Level 7 help.txt");
+        String fileName = "C:\\Users\\0108s\\OneDrive\\Documents\\duke\\Level 7 help.txt";
+        ArrayList<Task> tasks = new ArrayList<Task>();
+        List<String> list = new ArrayList<String>();
+        System.out.println("Hello I'm Duke\n" + "What can I do for you?");
+        String work;
+        try {
+            //FileReader fr = new FileReader("C:\\Users\\0108s\\OneDrive\\Documents\\duke\\Level 7 help.txt");
+            BufferedReader br = new BufferedReader(new FileReader(file));
             try {
-                //FileReader fr = new FileReader("C:\\Users\\0108s\\OneDrive\\Documents\\duke\\Level 7 help.txt");
-                BufferedReader br = new BufferedReader(new FileReader(file));
-                String work;
-                try {
-                    while ((work = br.readLine()) != null) {
-                        String [] tr = work.split(" ");
-                        String str = "";
-                        String u = tr[2];
-                        String ut = tr[5];
-                        for(int i = 7; i < tr.length; i = i + 1){
-                            str = str + tr[i] + " ";
-                        }
-                        if (str.contains("/")) {
-                            String[] arr = str.split("/");
-                            String p = arr[0];
-                            //String st = "";
-                            String sr = "";
-                            String q = arr[1];
-                            String[] arr2 = q.split(" ");
-                            for (int i = 1; i < arr2.length; i = i + 1) {
-                                sr = sr + arr2[i] + " ";
-                            }
-                            if (u.equals("D")) {
-                                Task d = new Deadline(p, sr);
-                                tasks.add(d);
-                                if(ut.equals("\u2713")){
-                                    d.markAsDone();
-                                }
-                                j = j + 1;
-                            } else {
-                                Task ev = new Event(p, q);
-                                tasks.add(ev);
-                                if(ut.equals("\u2713")){
-                                    ev.markAsDone();
-                                }
-                                j = j + 1;
-                            }
-                        } else {
-                            Task todo = new ToDo(str);
-                            tasks.add(todo);
-                            if(ut.equals("\u2713")){
-                                todo.markAsDone();
-                            }
-                            j = j + 1;
-                        }
-                    }
+                while ((work = br.readLine()) != null) {
+                    list.add(work);
                 }
-                catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-            catch (FileNotFoundException e1) {
+            } catch (IOException e1) {
                 e1.printStackTrace();
             }
+        }
+        catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        }
+        int j = list.size();
+        for(int i = 0; i < list.size(); i = i + 1){
+            String u = "";
+            String ut = "";
+            String[] add_tasks = list.get(i).split(" ");
+            u = add_tasks[2]; //T or D or E
+            ut = add_tasks[5]; //X or tick
+            String connector = "";
+            for (int k = 7; k < add_tasks.length; k = k + 1){
+                connector = connector + add_tasks[k] + " ";
+            }
+            String st = "";
+            String sr = "";
+            if (connector.contains("(")) {
+                String[] arr= connector.split(":");
+                String p = arr[0];
+                String[] arr1 = p.split(" ");
+                String q = arr[1];
+                String[] arr2 = q.split(" ");
+                for (int f = 0; f < arr1.length - 1; f = f + 1) {
+                    st = st + arr1[f] + " ";
+                }
+                for(int z = 0; z < arr2.length - 1; z = z + 1 ){
+                    sr = sr + arr2[z] + " ";
+                }
+                if(u.equals("D")){
+                    Task d = new Deadline(st,sr);
+                    tasks.add(d);
+                    if(ut.equals("\u2713")){
+                        d.markAsDone();
+                    }
+
+                }
+                else if(u.equals("E")){
+                    Task ev = new Event(st, sr);
+                    tasks.add(ev);
+                    if(ut.equals("\u2713")){
+                        ev.markAsDone();
+                    }
+                }
+            }
+            else{
+                if(u.equals("T")){
+                    Task t = new ToDo(connector);
+                    tasks.add(t);
+                    if(ut.equals("\u2713")) {
+                        t.markAsDone();
+                    }
+                }
+            }
+        }
+        Scanner input = new Scanner(System.in);
+        while (true) {
             String s = input.nextLine();
             String st = "";
             String sr = "";
@@ -78,7 +89,7 @@ public class Duke {
                 if (s.equals("list")) {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < j; i = i + 1) {
-                        System.out.println((i + 1) + ". " + tasks.get(i).toString());
+                        System.out.println((i + 1) + "." + tasks.get(i).toString());
                     }
 
                 } else {
@@ -96,17 +107,16 @@ public class Duke {
                             sr = sr + arr2[i] + " ";
                         }
                         if (first.equals("deadline")) {
-                            Task d = new Deadline(st, sr);
-                            tasks.add(d);
-                                try {
-                                    BufferedWriter out = new BufferedWriter(
-                                            new FileWriter(fileName, false));
-                                    for(int i = 0; i <= j; i = i + 1) {
-                                        out.write((i + 1) + ". " + tasks.get(i).toString() + "\n");
-                                    }
-                                    out.close();
+                            Task w = new Deadline(st, sr);
+                            tasks.add(w);
+                            try {
+                                BufferedWriter out = new BufferedWriter(
+                                        new FileWriter(fileName, false));
+                                for (int v = 0; v <= j; v = v + 1) {
+                                    out.write((v + 1) + ". " + tasks.get(v).toString() + "\n");
                                 }
-                            catch (IOException e1) {
+                                out.close();
+                            } catch (IOException e1) {
                                 e1.printStackTrace();
                             }
                             System.out.println(" Got it. I've added this task: ");
@@ -114,17 +124,16 @@ public class Duke {
                             System.out.println("Now you have " + (j + 1) + " tasks in the list.");
                             j = j + 1;
                         } else {
-                            Task ev  = new Event(st, sr);
+                            Task ev = new Event(st, sr);
                             tasks.add(ev);
-                            try{
+                            try {
                                 BufferedWriter out = new BufferedWriter(
-                                        new FileWriter(fileName, false));
-                                for(int i = 0; i <= j; i = i + 1) {
-                                    out.write((i + 1) + ". " + tasks.get(i).toString() + "\n");
+                                        new FileWriter(fileName, true));
+                                for (int t = 0; t <= j; t = t + 1) {
+                                    out.write((t + 1) + ". " + tasks.get(t).toString() + "\n");
                                 }
                                 out.close();
-                            }
-                            catch (IOException e1) {
+                            } catch (IOException e1) {
                                 e1.printStackTrace();
                             }
                             System.out.println(" Got it. I've added this task: ");
@@ -143,17 +152,16 @@ public class Duke {
                                 DukeException t = new DukeException(fir);
                                 System.out.println(t.cannotBeEmpty());
                             } else {
-                                Task todo  = new ToDo(e);
-                                tasks.add(todo);
-                                try{
+                               Task todo = new ToDo(e);
+                               tasks.add(todo);
+                                try {
                                     BufferedWriter out = new BufferedWriter(
-                                            new FileWriter(fileName, false));
-                                    for(int i = 0; i <= j; i = i + 1) {
-                                        out.write((i + 1) + ". " + tasks.get(i).toString());
+                                            new FileWriter(fileName, true));
+                                    for (int jk = 0; jk <= j; jk = jk + 1) {
+                                        out.write((jk + 1) + ". " + tasks.get(jk).toString());
                                     }
                                     out.close();
-                                }
-                                catch (IOException e1) {
+                                } catch (IOException e1) {
                                     e1.printStackTrace();
                                 }
                                 System.out.println(" Got it. I've added this task: ");
@@ -182,12 +190,11 @@ public class Duke {
                                         try {
                                             BufferedWriter out = new BufferedWriter(
                                                     new FileWriter(fileName, false));
-                                            for(int k = 0; k < j; k = k + 1) {
+                                            for (int k = 0; k < j; k = k + 1) {
                                                 out.write((k + 1) + ". " + tasks.get(k).toString() + "\n");
                                             }
                                             out.close();
-                                        }
-                                        catch (IOException e1) {
+                                        } catch (IOException e1) {
                                             e1.printStackTrace();
                                         }
                                         System.out.println("Nice! I've marked this task as done: ");
@@ -196,24 +203,13 @@ public class Duke {
                                 }
                             }
                         }else{
-                                    DukeException t = new DukeException(fir);
-                                    System.out.println(t.NotACommand());
-                                }
-
-                            }
+                            DukeException t = new DukeException(fir);
+                            System.out.println(t.NotACommand());
                         }
+
                     }
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
+    }
+}
