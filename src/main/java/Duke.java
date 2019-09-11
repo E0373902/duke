@@ -1,10 +1,15 @@
 import main.java.*;
-import java.util.*;
+
 import java.io.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.*;
 import java.lang.*;
 
 public class Duke {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         File file = new File("C:\\Users\\0108s\\OneDrive\\Documents\\duke\\Level 7 help.txt");
         String fileName = "C:\\Users\\0108s\\OneDrive\\Documents\\duke\\Level 7 help.txt";
         ArrayList<Task> tasks = new ArrayList<Task>();
@@ -21,12 +26,11 @@ public class Duke {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-        }
-        catch (FileNotFoundException e1) {
+        } catch (FileNotFoundException e1) {
             e1.printStackTrace();
         }
         int j = list.size();
-        for(int i = 0; i < list.size(); i = i + 1){
+        for (int i = 0; i < list.size(); i = i + 1) {
             String u = "";
             String ut = "";
             String[] add_tasks = list.get(i).split(" ");
@@ -100,14 +104,42 @@ public class Duke {
                         String first = arr1[0];
                         String q = arr[1];
                         String[] arr2 = q.split(" ");
+                        sr = arr2[1];
                         for (int i = 1; i < arr1.length; i = i + 1) {
                             st = st + arr1[i] + " ";
                         }
-                        for (int i = 1; i < arr2.length; i = i + 1) {
-                            sr = sr + arr2[i] + " ";
+                        for (int i = 2; i < arr.length; i = i + 1) {
+                            sr = sr + "/" + arr[i];
                         }
+                        String[] Date = sr.split(" ");
+                        String sDate1 = "";
+                        String time = "";
+                        String time2 = "";
+                        String diff = "";
+                        String date_time = "";
+                        sDate1 = Date[0];
+                        time = Date[1];
+                        Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1);
+                        Calendar cal=Calendar.getInstance();
+                        cal.setTime(date1);
+                        diff = getFormattedDate(cal.getTime());
+//Date/time pattern of input date
+                        DateFormat df = new SimpleDateFormat("HHmm");
+//Date/time pattern of desired output date
+                        DateFormat outputformat = new SimpleDateFormat("hh:mm aa");
+                        Date date = null;
+                        String output = null;
+                        try{
+                            //Conversion of input String to date
+                            date= df.parse(time);
+                            //old date format to new date format
+                            output = outputformat.format(date);
+                        }catch(ParseException pe){
+                            pe.printStackTrace();
+                        }
+                        date_time = diff + " " + output;
                         if (first.equals("deadline")) {
-                            Task w = new Deadline(st, sr);
+                            Task w = new Deadline(st, date_time);
                             tasks.add(w);
                             try {
                                 BufferedWriter out = new BufferedWriter(
@@ -124,7 +156,22 @@ public class Duke {
                             System.out.println("Now you have " + (j + 1) + " tasks in the list.");
                             j = j + 1;
                         } else {
-                            Task ev = new Event(st, sr);
+                            time2 = Date[3];
+                            DateFormat df1 = new SimpleDateFormat("HHmm");
+//Date/time pattern of desired output date
+                            DateFormat outputformat1 = new SimpleDateFormat("hh:mm aa");
+                            Date date2 = null;
+                            String output1 = null;
+                            try{
+                                //Conversion of input String to date
+                                date2 = df.parse(time2);
+                                //old date format to new date format
+                                output1 = outputformat.format(date2);
+                            }catch(ParseException pe){
+                                pe.printStackTrace();
+                            }
+                            date_time = date_time + " - " + output1;
+                            Task ev = new Event(st, date_time);
                             tasks.add(ev);
                             try {
                                 BufferedWriter out = new BufferedWriter(
@@ -211,5 +258,28 @@ public class Duke {
                 }
             }
         }
+
     }
+
+    private static String getFormattedDate(Date date) {
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(date);
+        //2nd of march 2015
+        int day=cal.get(Calendar.DATE);
+
+        if(!((day>10) && (day<19)))
+            switch (day % 10) {
+                case 1:
+                    return new SimpleDateFormat("d'st' 'of' MMMM yyyy").format(date);
+                case 2:
+                    return new SimpleDateFormat("d'nd' 'of' MMMM yyyy").format(date);
+                case 3:
+                    return new SimpleDateFormat("d'rd' 'of' MMMM yyyy").format(date);
+                default:
+                    return new SimpleDateFormat("d'th' 'of' MMMM yyyy").format(date);
+            }
+        return new SimpleDateFormat("d'th' 'of' MMMM yyyy").format(date);
+    }
+
 }
+
