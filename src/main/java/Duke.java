@@ -29,7 +29,6 @@ public class Duke {
         } catch (FileNotFoundException e1) {
             e1.printStackTrace();
         }
-        int j = list.size();
         for (int i = 0; i < list.size(); i = i + 1) {
             String u = "";
             String ut = "";
@@ -92,7 +91,7 @@ public class Duke {
             } else {
                 if (s.equals("list")) {
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < j; i = i + 1) {
+                    for (int i = 0; i < tasks.size(); i = i + 1) {
                         System.out.println((i + 1) + "." + tasks.get(i).toString());
                     }
 
@@ -144,7 +143,7 @@ public class Duke {
                             try {
                                 BufferedWriter out = new BufferedWriter(
                                         new FileWriter(fileName, false));
-                                for (int v = 0; v <= j; v = v + 1) {
+                                for (int v = 0; v < tasks.size(); v = v + 1) {
                                     out.write((v + 1) + ". " + tasks.get(v).toString() + "\n");
                                 }
                                 out.close();
@@ -152,9 +151,8 @@ public class Duke {
                                 e1.printStackTrace();
                             }
                             System.out.println(" Got it. I've added this task: ");
-                            System.out.println(tasks.get(j).toString());
-                            System.out.println("Now you have " + (j + 1) + " tasks in the list.");
-                            j = j + 1;
+                            System.out.println(w.toString());
+                            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                         } else {
                             time2 = Date[3];
                             DateFormat df1 = new SimpleDateFormat("HHmm");
@@ -176,7 +174,7 @@ public class Duke {
                             try {
                                 BufferedWriter out = new BufferedWriter(
                                         new FileWriter(fileName, true));
-                                for (int t = 0; t <= j; t = t + 1) {
+                                for (int t = 0; t <= tasks.size(); t = t + 1) {
                                     out.write((t + 1) + ". " + tasks.get(t).toString() + "\n");
                                 }
                                 out.close();
@@ -184,9 +182,8 @@ public class Duke {
                                 e1.printStackTrace();
                             }
                             System.out.println(" Got it. I've added this task: ");
-                            System.out.println(tasks.get(j).toString());
-                            System.out.println("Now you have " + (j + 1) + " tasks in the list.");
-                            j = j + 1;
+                            System.out.println(ev.toString());
+                            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                         }
                     } else {
                         String[] arr = s.split(" ");
@@ -204,7 +201,7 @@ public class Duke {
                                 try {
                                     BufferedWriter out = new BufferedWriter(
                                             new FileWriter(fileName, true));
-                                    for (int jk = 0; jk <= j; jk = jk + 1) {
+                                    for (int jk = 0; jk < tasks.size(); jk = jk + 1) {
                                         out.write((jk + 1) + ". " + tasks.get(jk).toString());
                                     }
                                     out.close();
@@ -212,9 +209,8 @@ public class Duke {
                                     e1.printStackTrace();
                                 }
                                 System.out.println(" Got it. I've added this task: ");
-                                System.out.println(tasks.get(j).toString());
-                                System.out.println("Now you have " + (j + 1) + " tasks in the list.");
-                                j = j + 1;
+                                System.out.println(todo.toString());
+                                System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                             }
                         } else if (fir.equals("deadline")) {
                             if (e.equals("")) {
@@ -231,13 +227,13 @@ public class Duke {
                                 DukeException t = new DukeException(fir);
                                 System.out.println(t.cannotBeEmpty());
                             } else {
-                                for (int i = 0; i < j; i = i + 1) {
+                                for (int i = 0; i < tasks.size(); i = i + 1) {
                                     if (s.equals("Done " + (i + 1))) {
                                         tasks.get(i).markAsDone();
                                         try {
                                             BufferedWriter out = new BufferedWriter(
                                                     new FileWriter(fileName, false));
-                                            for (int k = 0; k < j; k = k + 1) {
+                                            for (int k = 0; k < tasks.size(); k = k + 1) {
                                                 out.write((k + 1) + ". " + tasks.get(k).toString() + "\n");
                                             }
                                             out.close();
@@ -249,7 +245,27 @@ public class Duke {
                                     }
                                 }
                             }
-                        }else{
+                        }
+                        else if (fir.equals("find")) {
+                            if (e.equals("")) {
+                                DukeException t = new DukeException(fir);
+                                System.out.println(t.cannotBeEmpty());
+                            } else {
+                                    String[] str = s.split(" ");
+                                    String g = str[1];
+                                    List<String> list1 = new ArrayList<String>();
+                                    for(int i = 0; i < tasks.size(); i = i + 1){
+                                        if(tasks.get(i).toString().contains(g)){
+                                                list1.add(tasks.get(i).toString());
+                                            }
+                                        }
+                                    System.out.println("Here are the matching tasks in your list:");
+                                    for(int k = 0; k < list1.size(); k = k + 1){
+                                        System.out.println((k + 1) + ". " + list1.get(k));
+                                    }
+                                    }
+                                }
+                        else{
                             DukeException t = new DukeException(fir);
                             System.out.println(t.NotACommand());
                         }
