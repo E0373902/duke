@@ -30,7 +30,7 @@ public class Duke {
             e1.printStackTrace();
         }
 
-      //  String str[] = new String[list.size()];
+        //  String str[] = new String[list.size()];
 
         for (int i = 0; i < list.size(); i = i + 1) {
             String[] add_tasks = list.get(i).split(" ");
@@ -173,7 +173,7 @@ public class Duke {
                             try {
                                 BufferedWriter out = new BufferedWriter(
                                         new FileWriter(fileName, true));
-                                
+
                                 for (int t = 0; t <= tasks.size(); t = t + 1) {
 
                                     out.write((t + 1) + ". " + tasks.get(t).toString() + "\n");
@@ -246,17 +246,11 @@ public class Duke {
                                     }
                                 }
                             }
-<<<<<<< HEAD
                         } else if (fir.equals("delete")) {
-=======
-                        }
-                        else if (fir.equals("find")) {
->>>>>>> branch-Level-9
                             if (e.equals("")) {
                                 DukeException t = new DukeException(fir);
                                 System.out.println(t.cannotBeEmpty());
                             } else {
-<<<<<<< HEAD
                                 for (int i = 0; i < tasks.size(); i = i + 1) {
                                     if (s.equals("delete " + (i + 1))) {
                                         System.out.println("Noted. I've removed this task: ");
@@ -276,36 +270,33 @@ public class Duke {
                                     }
                                 }
                             }
-                        }
-                    else {
-                                            DukeException t = new DukeException(fir);
-                                            System.out.println(t.NotACommand());
-                                        }
+                        } else if (fir.equals("find")) {
+                            if (e.equals("")) {
+                                DukeException t = new DukeException(fir);
+                                System.out.println(t.cannotBeEmpty());
+                            } else {
+                                String[] str = s.split(" ");
+                                String g = str[1];
+                                List<String> list1 = new ArrayList<String>();
+                                for (int i = 0; i < tasks.size(); i = i + 1) {
+                                    if (tasks.get(i).toString().contains(g)) {
+                                        list1.add(tasks.get(i).toString());
                                     }
+                                }
+                                System.out.println("Here are the matching tasks in your list:");
+                                for (int k = 0; k < list1.size(); k = k + 1) {
+                                    System.out.println((k + 1) + ". " + list1.get(k));
                                 }
                             }
-=======
-                                    String[] str = s.split(" ");
-                                    String g = str[1];
-                                    List<String> list1 = new ArrayList<String>();
-                                    for(int i = 0; i < tasks.size(); i = i + 1){
-                                        if(tasks.get(i).toString().contains(g)){
-                                                list1.add(tasks.get(i).toString());
-                                            }
-                                        }
-                                    System.out.println("Here are the matching tasks in your list:");
-                                    for(int k = 0; k < list1.size(); k = k + 1){
-                                        System.out.println((k + 1) + ". " + list1.get(k));
-                                    }
-                                    }
-                                }
-                        else{
+                        }else {
                             DukeException t = new DukeException(fir);
                             System.out.println(t.NotACommand());
->>>>>>> branch-Level-9
                         }
-
                     }
+                }
+            }
+        }
+    }
 
     private static String getFormattedDate(Date date) {
         Calendar cal=Calendar.getInstance();
